@@ -1,0 +1,10 @@
+<configuration>
+	<set name="sergio">
+		<elements>
+			<webpage url="http://jupiter/server/monitoring/" cron="0 0/1 * * * ?" notifiers="mail"/>
+		</elements>
+		<notifiers>
+			<mail id="mail" to="serge.simon@gmail.com" />
+		</notifiers>
+	</set>
+</configuration>

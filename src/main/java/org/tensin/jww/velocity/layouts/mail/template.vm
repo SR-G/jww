@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta content="text/html; charset=${charset}" http-equiv="Content-Type" />
+	    <title>${title}</title>
+	</head>
+	<body style="padding:0; margin:0; background:#6b6b6b">
+		<table width="100%" border="0" cellspacing="0" cellpadding="15" bgcolor="#6b6b6b">
+			<tr>
+				<td align="center" valign="top">
+					<table width="800" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td><br />
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td width="200" valign="top">
+											<table width="100%" border="0" cellspacing="0" cellpadding="0">
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b88855">
+															<tr>
+																<td width="10" style="font-size:0; line-height:0;" align="left"><img src="cid:${imgHl}" alt="" /></td>
+																<td style="font-family: Arial; font-size:14px; line-height:14px; color:#000; font-weight:bold; text-align:left; ">Tests ${upperCasePrd}</td>
+																<td width="10" style="font-size:0; line-height:0;" align="right"><img src="cid:${imgHr}" alt="" /></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td width="100%" align="center">
+														<table width="100%" border="0" cellspacing="0" cellpadding="10">
+															<tr>
+																<td width="100%" style="font-family: Arial; font-size:10px; line-height:14px; text-align:center; color:#ffffff;">
+																	<img src="cid:${imgIcon_continuousintegration}" border="0" alt="" /><br />
+																	EVIL JIP<br>
+																</td>
+															</tr>
+														</table><br />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b88855">
+															<tr>
+																<td width="10" style="font-size:0; line-height:0;" align="left"><img src="cid:${imgHl}" alt="" /></td>
+																<td style="font-family: Arial; font-size:14px; line-height:14px; color:#000; font-weight:bold; text-align:left; ">Contexte</td>
+																<td width="10" style="font-size:0; line-height:0;" align="right"><img src="cid:${imgHr}" alt="" /></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="10">
+															<tr>
+																<td style="font-family: Arial; font-size:11px; line-height:14px; text-align:left; color:#ffffff;">
+																	<ul style="padding:0 10px; margin:0; color:#ffc600">
+																	    <li><span style="color:#fff; text-decoration:none;">PRD <br>[<b>${prd}</b>]</span></li>
+																		<li><span style="color:#fff; text-decoration:none;">Version [<b>${versionMetier}</b>]<br>[<b>${releaseMetier}</b>]</span></li>
+																	</ul>
+																	<br>
+																	<ul style="padding:0 10px; margin:0; color:#ffc600">
+																		<li><span style="color:#fff; text-decoration:none;">Serveur d'exécution <br>[<b>${hostname}</b>]</span></li>
+																		<li><span style="color:#fff; text-decoration:none;">Execution le <br>[<b>${date}</b>]</span></li>
+																		<li><span style="color:#fff; text-decoration:none;">Temps d'exécution total de tous les tests <br>[<b>${duree_globale}</b>]</span></li>
+																	</ul>
+																</td>
+															</tr>
+														</table><br />
+													</td>
+												</tr>
+#if ($uninformedPersonnel.size() != 0)
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b88855">
+															<tr>
+																<td width="10" style="font-size:0; line-height:0;" align="left"><img src="cid:${imgHl}" alt="" /></td>
+																<td style="font-family: Arial; font-size:14px; line-height:14px; color:#000; font-weight:bold; text-align:left; ">Erreurs de notifications</td>
+																<td width="10" style="font-size:0; line-height:0;" align="right"><img src="cid:${imgHr}" alt="" /></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="10">
+															<tr>
+																<td style="font-family: Arial; font-size:11px; line-height:14px; text-align:left; color:#ffffff;">
+																	Impossible de retrouver l'email des personnes ci-dessous.<br />
+																	<ul style="padding:0 10px; margin:0; color:#ffc600">
+#foreach ($userName in $uninformedPersonnel)
+																		<li><span style="color:#fff; text-decoration:none;"><b>$userName</b></span></li>
+#end
+																	</ul>
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+#end												
+											</table>
+										</td>
+										<td width="24" valign="top">&nbsp;</td>
+										<td width="576" valign="top">
+											<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b88855">
+															<tr>
+																<td width="10" style="font-size:0; line-height:0;" align="left"><img src="cid:${imgHl}" alt="" /></td>
+																<td style="font-family: Arial; font-size:16px; line-height:16px; color:#fff; font-weight:bold; text-transform:uppercase; text-align:left; ">Résumé</td>
+																<td width="10" style="font-size:0; line-height:0;" align="right"><img src="cid:${imgHr}" alt="" /></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0">
+															<tr>
+																<td style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;"><br />
+
+																	<table cellpadding="1" cellspacing="1" width="95%">
+#foreach($result in $stats)
+																		<tr>
+																			<td width="40" valign="top" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+#if ( $result.hasErrors() )
+																				<img src="cid:${imgFailure}" />
+#else
+																				<img src="cid:${imgSuccess}" />
+#end
+																			</td>
+																			<td width="40%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Occurrence : <b>$result.getIdentifiant()</b> ($result.getTag())
+																			</td>
+																			<td width="20%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Success : <b>$result.getSuccessPercentageLabel()%</b>
+																			</td>
+																			<td valign="middle" align="right" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Logs&nbsp;:&nbsp;
+																			</td>
+																			<td valign="middle" align="right" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				<a href="$result.getUrl()"><img src="cid:${imgLogs}" border="0" alt="Acceder aux logs" /></a>
+																			</td>
+
+																			
+																			<td valign="middle" align="right" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Couv&nbsp;:&nbsp;
+																			</td>
+																			<td valign="middle" align="right" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				<a href="$result.getUrl2()"><img src="cid:${imgLogs}" border="0" alt="Acceder aux rapports jacoco" /></a>
+																			</td>
+																			
+																		</tr>
+#end
+																	</table>
+																</td>
+															</tr>
+#if ($processRunError.size() > 0)
+															<tr>
+																<td style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;"><br />
+																	<img src="cid:${imgHrmiddle}" width="576" height="13" alt="" />
+																	<table cellpadding="0" cellspacing="0" width="95%" border="0">
+	#foreach($errors in $processRunError)
+		#foreach($error in $errors)
+			#if($velocityCount == 1)
+																		<tr>
+																			<td style="font-family: Arial; font-size:12px; line-height:15px; text-align:left; color:#ffffff;">
+																				<img src="cid:${imgFailure}" />&nbsp;&nbsp;
+																			</td>
+																			<td colspan="4" style="font-family: Arial; font-size:12px; line-height:15px; text-align:left; color:#ffffff;">
+																				<b>$error</b> 
+			#end
+			#if($velocityCount == 2)
+																				($error)
+																			</td>
+																		</tr>
+			#end
+			#if($velocityCount == 3)												
+																		<tr>
+																			<td width="4%" style="font-family: Arial; font-size:12px; line-height:15px; text-align:left; color:#ffffff;">
+																				
+																			</td>
+																			<td width="30%" style="font-family: Arial; font-size:12px; line-height:15px; text-align:right; color:#ffffff;">
+																				Process Occurrence Error :
+																			</td>
+																			<td width="18%" style="font-family: Arial; font-size:12px; line-height:15px; text-align:left; color:#ffffff;">
+																				<a href="$error"><img src="cid:${imgProcessLog}" alt="RunOccurrenceProcessingError" border="0" width="32" height="32" /></a>
+																			</td>
+			#end
+			#if($velocityCount == 4)
+																			<td width="30%" style="font-family: Arial; font-size:12px; line-height:15px; text-align:right; color:#ffffff;">
+																				Process Tester Error :
+																			</td>
+																			<td width="18%" style="font-family: Arial; font-size:12px; line-height:15px; text-align:left; color:#ffffff;">
+				#if($error)
+																				<a href="$error"><img src="cid:${imgProcessLog}" alt="RunTesterProcessingError" border="0" width="32" height="32" /></a>
+				#else
+																				<span style="font-size:20px">
+																					--
+																				</span>
+				#end
+																			</td>
+																		</tr>
+			#end
+		#end
+																		<tr>
+																			<td colspan="5" style="font-family: Arial; font-size:12px; line-height:15px; text-align:left; color:#ffffff;">
+																				<img src="cid:${imgHrmiddle}" width="576" height="5" alt="" />
+																			</td>
+																		</tr>
+	#end																																			
+																	</table>
+																</td>
+															</tr>
+#end															
+														</table><br>
+													</td>
+												</tr>
+
+
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b88855">
+															<tr>
+																<td width="10" style="font-size:0; line-height:0;" align="left"><img src="cid:${imgHl}" alt="" /></td>
+																<td style="font-family: Arial; font-size:16px; line-height:16px; color:#fff; font-weight:bold; text-transform:uppercase; text-align:left; ">Statistiques</td>
+																<td width="10" style="font-size:0; line-height:0;" align="right"><img src="cid:${imgHr}" alt="" /></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td>
+#if($urlStats1 && $urlStats2)
+														<table width="100%" border="0" cellspacing="0" cellpadding="0">
+															<tr>
+																<td style="font-family: Arial; font-size:12px; line-height:17px; text-align:center; color:#ffffff;">
+																	<a href="${urlStats1}"><img src="cid:${imgStats1}" alt="" width="341" height="256" /></a>
+																	&nbsp;
+																	<a href="${urlStats2}"><img src="cid:${imgStats2}" alt="" width="341" height="256" /></a>
+																</td>
+															</tr>
+														</table><br>
+#else
+														<br/>
+#end
+													</td>
+												</tr>
+
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b88855">
+															<tr>
+																<td width="10" style="font-size:0; line-height:0;" align="left"><img src="cid:${imgHl}" alt="" /></td>
+																<td style="font-family: Arial; font-size:16px; line-height:16px; color:#fff; font-weight:bold; text-transform:uppercase; text-align:left; ">Détails</td>
+																<td width="10" style="font-size:0; line-height:0;" align="right"><img src="cid:${imgHr}" alt="" /></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0">
+															<tr>
+																<td style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;"><br />
+
+																	<table cellpadding="5" cellspacing="5" width="95%">
+#foreach($result in $stats)
+																		<tr>
+																			<td width="40" valign="top" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+#if ( $result.hasErrors() )
+																				<img src="cid:${imgFailure}" />
+#else
+																				<img src="cid:${imgSuccess}" />
+#end
+																			</td>
+																			<td width="50%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Occurrence : <b>$result.getIdentifiant()</b> ($result.getTag())
+																			</td>
+																			<td width="30%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Durée : <b>$result.getDuration()</b>
+																			</td>
+																			<td valign="middle" align="right" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Logs&nbsp;:&nbsp;
+																			</td>
+																			<td valign="middle" align="right" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				<a href="$result.getUrl()"><img src="cid:${imgLogs}" border="0" alt="Accéder aux logs" /></a>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td colspan="5" valign="top" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Tests executés : <b>$result.getKey()</b> ($result.getNbTests() tests)
+																			</td>
+																		</tr>
+																		<tr>
+																			<td colspan="5" valign="top" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Tests success <b>$result.getSuccessPercentageLabel()%</b>&nbsp;($result.getSuccess() succès, $result.getFailures() failures).<br>
+																				<b>$result.getErrors()</b> exceptions, <b>$result.getLogErrors()</b> erreurs dans les logs.<br>
+																			</td>
+																		</tr>
+#if ( $result.getFailures() > 0 ) 												
+																		<tr>
+																			<td colspan="5" valign="top" style="font-family: Arial; font-size:10px; line-height:17px; text-align:left; color:#ffffff;">
+																				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+																					<tr>
+																						<td colspan="2" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																							<b>Tests en erreur :</b>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td width="20" style="font-family: Arial; font-size:10px; line-height:17px; text-align:left; color:#ffffff;">
+																							&nbsp;
+																						</td>
+																						<td style="font-family: Arial; font-size:10px; line-height:17px; text-align:left; color:#ffffff;">
+#foreach($test in $result.getTestsEnEchec())
+																							$test<br>			
+#end												
+																						</td>
+																					</tr>
+																				</table>	
+																			</td>
+																		</tr>
+#end												
+																		<tr>
+																			<td>&nbsp;</td>
+																		</tr>
+#end
+																	</table>
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b88855">
+															<tr>
+																<td width="10" style="font-size:0; line-height:0;" align="left"><img src="cid:${imgHl}" alt="" /></td>
+																<td style="font-family: Arial; font-size:16px; line-height:16px; color:#fff; font-weight:bold; text-transform:uppercase; text-align:left; ">Summary Zone</td>
+																<td width="10" style="font-size:0; line-height:0;" align="right"><img src="cid:${imgHr}" alt="" /></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<table width="100%" border="0" cellspacing="0" cellpadding="0">
+															<tr>
+																<td style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;"><br />
+																	<table cellpadding="5" cellspacing="5" width="95%">
+#foreach($occurrenceList in $summaryZone)																	
+																		<tr>
+																			<td colspan="4" valign="top" style="font-family: Arial; font-size:12px; line-height:17px; text-align:left; color:#ffffff;">
+																				Occurrence : 
+#foreach($occurrence in $occurrenceList)																				
+	#if($velocityCount == 2)
+																				<b>$occurrence.getIdentifiant()</b> ($occurrence.getTag())
+	#end
+#end																					
+																			</td>	
+																		</tr>									
+																		<tr>
+																			<td width="10%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:center; color:#ffffff;">
+																			</td>
+																			<td width="30%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:center; color:#ffffff;">
+																				Errors :
+#foreach($occurrence in $occurrenceList)
+	#if($velocityCount == 1)
+		#set($imageState = $occurrence.getErrors())
+		#if($imageState != -1)
+			#if($imageState == 1)
+																				<img alt="red down" src="cid:${imgRed_down}" width="15px" height="15px" />
+			#else	
+																				<img alt="green up" src="cid:${imgGreen_up}" width="15px" height="15px" />
+			#end
+		#end	
+	#elseif($velocityCount == 2)
+																				<span style="font-size:16px">
+																					#if($occurrence.getErrors() == -1) -- /
+																					#else $occurrence.getErrors() /
+																					#end
+																				</span>
+	#elseif($velocityCount == 3)												
+																				<span style="font-size:12px">
+																					#if($occurrence.getErrors() == -1) -- 
+																					#else $occurrence.getErrors()
+																					#end
+																				</span>	
+	#end																																					
+#end	
+																			</td>
+																			<td width="30%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:center; color:#ffffff;">
+																				Failures :
+#foreach($occurrence in $occurrenceList)
+	#if($velocityCount == 1)
+		#set($imageState = $occurrence.getFailures())
+		#if($imageState != -1)														
+			#if($occurrence.getFailures() == 1)
+																				<img alt="red down" src="cid:${imgRed_down}" width="15px" height="15px" />
+			#else	
+																				<img alt="green up" src="cid:${imgGreen_up}" width="15px" height="15px" />
+			#end
+		#end	
+	#elseif($velocityCount == 2)
+																				<span style="font-size:16px">
+																					#if($occurrence.getFailures() == -1) -- / 
+																					#else $occurrence.getFailures() /
+																					#end
+																				</span>
+	#elseif($velocityCount == 3)												
+																				<span style="font-size:12px">
+																					#if($occurrence.getFailures() == -1) -- 
+																					#else $occurrence.getFailures()
+																					#end
+																				</span>
+	#end																																					
+#end	
+																			</td>
+																			<td width="30%" style="font-family: Arial; font-size:12px; line-height:17px; text-align:center; color:#ffffff;">
+																				Errors Log :
+#foreach($occurrence in $occurrenceList)
+	#if($velocityCount == 1)
+		#set($imageState = $occurrence.getLogErrors())
+		#if($imageState != -1)														
+			#if($occurrence.getLogErrors() == 1)
+																				<img alt="red down" src="cid:${imgRed_down}" width="15px" height="15px" />
+			#else	
+																				<img alt="green up" src="cid:${imgGreen_up}" width="15px" height="15px" />
+			#end
+		#end	
+	#elseif($velocityCount == 2)
+																				<span style="font-size:16px">
+																					#if($occurrence.getLogErrors() == -1) -- / 
+																					#else $occurrence.getLogErrors() /
+																					#end
+																				</span>
+	#elseif($velocityCount == 3)												
+																				<span style="font-size:12px">
+																					#if($occurrence.getLogErrors() == -1) -- 
+																					#else $occurrence.getLogErrors()
+																					#end
+																				</span>	
+	#end																																					
+#end	
+																			</td>
+																			
+																		</tr>
+#end																		
+																	</table>
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+											</table>
+											<img src="cid:${imgHrmiddle}" width="576" height="13" alt="" />
+										</td>
+									</tr>
+								</table>
+								<br /><br />
+							</td>
+						</tr>
+						
+						<tr>
+							<td>
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#474747">
+									<tr>
+										<td style="font-size:0; line-height:0;"><img src="cid:${imgT}" alt="" /></td>
+									</tr>
+									<tr>
+										<td style="font-family: Arial; font-size:10px; line-height:12px; text-align:center; color:#cccccc;">
+											Launcher de tests ${upperCasePrd} exécuté sur <b>${hostname}</b> (login : <b>${username}</b>), veuillez-vous connecter sur la machine et simplement modifier le <b>pom.xml</b> sous <b>~/tests-integration/launcher/</b> au besoin pour : 
+											<b>ajouter de nouveaux destinataires</b>, <b>modifier les occurrences à exécuter</b>, <b>modifier le jeu de tests à faire tourner</b>, etc. (voir bloc configuration du plugin <b>maven-integration-plugin</b>).<br>
+											<br>
+											Le déclenchement sur le serveur se fait par cron ("crontab -e" pour la modifier).<br>
+											<br>
+											Le lancement manuel se fait pas "mvn integration:cvs" pour le checkout et "mvn integration:test" pour le déroulement des tests.
+										</td>
+									</tr>
+									<tr>
+										<td style="font-size:0; line-height:0;"><img src="cid:${imgB}" alt="" /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
