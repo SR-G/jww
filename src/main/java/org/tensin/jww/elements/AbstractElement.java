@@ -19,6 +19,8 @@ public abstract class AbstractElement {
     /** The user. */
     private String name = "_default";
 
+    public abstract void check();
+
     /**
      * Gets the cron.
      * 

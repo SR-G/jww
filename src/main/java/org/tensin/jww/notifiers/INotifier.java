@@ -26,6 +26,13 @@ public interface INotifier {
     void execute(final AnalyzeResult result) throws CoreException;
 
     /**
+     * Gets the cron.
+     * 
+     * @return the cron
+     */
+    String getCron();
+
+    /**
      * Gets the id.
      * 
      * @return the id

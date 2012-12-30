@@ -3,6 +3,7 @@ package org.tensin.jww.configuration;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.slf4j.Logger;
@@ -21,6 +22,23 @@ public class Configuration {
     @ElementList(name = "set", inline = true)
     private Collection<ConfigurationSet> sets = new ArrayList<ConfigurationSet>();
 
+    /** The smtp. */
+    @Element(required = false)
+    private SMTP smtp;
+
+    /** The proxy. */
+    @Element(required = false)
+    private Proxy proxy;
+
+    /**
+     * Gets the proxy.
+     * 
+     * @return the proxy
+     */
+    public Proxy getProxy() {
+        return proxy;
+    }
+
     /**
      * Gets the sets.
      * 
@@ -31,6 +49,25 @@ public class Configuration {
     }
 
     /**
+     * Gets the smtp.
+     * 
+     * @return the smtp
+     */
+    public SMTP getSmtp() {
+        return smtp;
+    }
+
+    /**
+     * Sets the proxy.
+     * 
+     * @param proxy
+     *            the new proxy
+     */
+    public void setProxy(final Proxy proxy) {
+        this.proxy = proxy;
+    }
+
+    /**
      * Sets the sets.
      * 
      * @param sets
@@ -38,6 +75,16 @@ public class Configuration {
      */
     public void setSets(final Collection<ConfigurationSet> sets) {
         this.sets = sets;
+    }
+
+    /**
+     * Sets the smtp.
+     * 
+     * @param smtp
+     *            the new smtp
+     */
+    public void setSmtp(final SMTP smtp) {
+        this.smtp = smtp;
     }
 
     /* (non-Javadoc)
@@ -57,7 +104,7 @@ public class Configuration {
      */
     public void updateAdditionnalInformations() {
         for (final ConfigurationSet set : sets) {
-            set.updateAdditionnalInformations();
+            set.updateAdditionnalInformations(this);
         }
     }
 

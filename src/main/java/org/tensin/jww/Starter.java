@@ -20,10 +20,15 @@ import org.simpleframework.xml.strategy.Visitor;
 import org.simpleframework.xml.strategy.VisitorStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tensin.common.EmbeddedJetty;
 import org.tensin.jww.configuration.Configuration;
 import org.tensin.jww.configuration.ConfigurationSet;
 import org.tensin.jww.configuration.JWWConfigurationVisitor;
 import org.tensin.jww.elements.IElement;
+import org.tensin.jww.notifiers.INotifier;
+import org.tensin.jww.quartz.CronConstants;
+import org.tensin.jww.quartz.CronElementJob;
+import org.tensin.jww.quartz.CronNotifierJob;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -38,7 +43,10 @@ public class Starter {
     private final static Logger LOGGER = LoggerFactory.getLogger(Starter.class);
 
     /** The Constant DEFAULT_JOB_GROUP. */
-    private static final String DEFAULT_JOB_GROUP = "jww.jobs";
+    private static final String DEFAULT_ELEMENTS_JOB_GROUP = "jww.jobs.elements";
+
+    /** The Constant DEFAULT_NOTIFIERS_JOB_GROUP. */
+    private static final String DEFAULT_NOTIFIERS_JOB_GROUP = "jww.jobs.notifiers";
 
     /**
      * The main method.
@@ -72,6 +80,8 @@ public class Starter {
     /** The configuration. */
     private Configuration configuration;
 
+    private EmbeddedJetty jetty ;
+
     /**
      * Inits the configuration.
      * 
@@ -92,7 +102,7 @@ public class Starter {
             try {
                 configuration = serializer.read(Configuration.class, source);
                 configuration.updateAdditionnalInformations();
-                LOGGER.info(configuration.toString());
+                LOGGER.info("\n" + configuration.toString());
             } catch (final Exception e) {
                 throw new CoreException("Can't load configuration from [" + configurationFileName + "]", e);
             }
@@ -107,24 +117,8 @@ public class Starter {
      */
     private void initJobs() throws CoreException {
         for (final ConfigurationSet set : configuration.getSets()) {
-            for (final IElement element : set.getElements()) {
-                final String cronExpression = element.getCron();
-                if (StringUtils.isNotEmpty(cronExpression)) {
-                    try {
-                        final JobDetail jobDetail = org.quartz.JobBuilder.newJob(CronJob.class).withIdentity(element.getName(), DEFAULT_JOB_GROUP).build();
-                        final CronTrigger trigger = org.quartz.TriggerBuilder.newTrigger().withIdentity(element.getName(), DEFAULT_JOB_GROUP).
-                                startNow().
-                                withSchedule(org.quartz.CronScheduleBuilder.cronSchedule(cronExpression)).
-                                build();
-                        jobDetail.getJobDataMap().put(CronJob.KEY_DATA_CONFIGURATION, element);
-                        jobDetail.getJobDataMap().put(CronJob.KEY_DATA_NOTIFIERS, set.getNotifiers());
-                        jobDetail.getJobDataMap().put(CronJob.KEY_DATA_NAME, set.getName());
-                        DirectSchedulerFactory.getInstance().getScheduler().scheduleJob(jobDetail, trigger);
-                    } catch (final SchedulerException e) {
-                        LOGGER.error("Can't register job " + element.getName() + " with cron [" + cronExpression + "]", e);
-                    }
-                }
-            }
+            registerElementsCronJob(set);
+            registerNotifiersCronJob(set);
         }
     }
 
@@ -173,6 +167,70 @@ public class Starter {
     }
 
     /**
+     * Register elements cron job.
+     * 
+     * @param set
+     *            the set
+     */
+    private void registerElementsCronJob(final ConfigurationSet set) {
+        int cnt = 1;
+        for (final IElement element : set.getElements()) {
+            final String cronExpression = element.getCron();
+            if (StringUtils.isNotEmpty(cronExpression)) {
+                try {
+                    LOGGER.info("Registering element job [" + element.getName() + "-" + cnt + "] with cron [" + cronExpression + "], " + element.toString());
+                    final JobDetail jobDetail = org.quartz.JobBuilder.newJob(CronElementJob.class).withIdentity(element.getName() + "-" + cnt, DEFAULT_ELEMENTS_JOB_GROUP).build();
+                    final CronTrigger trigger = org.quartz.TriggerBuilder.newTrigger().withIdentity(element.getName() + "-" + cnt, DEFAULT_ELEMENTS_JOB_GROUP).
+                            startNow().
+                            withSchedule(org.quartz.CronScheduleBuilder.cronSchedule(cronExpression)).
+                            build();
+                    jobDetail.getJobDataMap().put(CronConstants.KEY_DATA_NOTIFIERS, set.getNotifiers());
+                    jobDetail.getJobDataMap().put(CronConstants.KEY_DATA_NAME, set.getName());
+                    jobDetail.getJobDataMap().put(CronConstants.KEY_DATA_ELEMENT_CONFIGURATION, element);
+                    DirectSchedulerFactory.getInstance().getScheduler().scheduleJob(jobDetail, trigger);
+                } catch (final SchedulerException e) {
+                    LOGGER.error("Can't register job [" + element.getName() + "] with cron [" + cronExpression + "]", e);
+                }
+                cnt++;
+            }
+        }
+    }
+
+    /**
+     * Register notifiers cron job.
+     * 
+     * @param set
+     *            the set
+     */
+    private void registerNotifiersCronJob(final ConfigurationSet set) {
+        int cnt = 1;
+        for (final INotifier notifier : set.getNotifiers()) {
+            final String cronExpression = notifier.getCron();
+            if (StringUtils.isNotEmpty(cronExpression)) {
+                try {
+                    LOGGER.info("Registering notifier job [" + notifier.getId() + "-" + cnt + "] with cron [" + cronExpression + "], "
+                            + notifier.toString());
+                    final JobDetail jobDetail = org.quartz.JobBuilder.newJob(CronNotifierJob.class)
+                            .withIdentity(notifier.getId() + "-" + cnt, DEFAULT_NOTIFIERS_JOB_GROUP).build();
+                    final CronTrigger trigger = org.quartz.TriggerBuilder.newTrigger()
+                            .withIdentity(notifier.getId() + "-" + cnt, DEFAULT_NOTIFIERS_JOB_GROUP).
+                            startNow().
+                            withSchedule(org.quartz.CronScheduleBuilder.cronSchedule(cronExpression)).
+                            build();
+                    jobDetail.getJobDataMap().put(CronConstants.KEY_DATA_NOTIFIERS, set.getNotifiers());
+                    jobDetail.getJobDataMap().put(CronConstants.KEY_DATA_NAME, set.getName());
+                    jobDetail.getJobDataMap().put(CronConstants.KEY_DATA_NOTIFIER_CONFIGURATION, notifier);
+                    DirectSchedulerFactory.getInstance().getScheduler().scheduleJob(jobDetail, trigger);
+                } catch (final SchedulerException e) {
+                    LOGGER.error("Can't register notifier job [" + notifier.getId() + "] with cron [" + cronExpression + "]", e);
+                }
+                cnt++;
+            }
+        }
+
+    }
+
+    /**
      * Start.
      * 
      * @throws CoreException
@@ -188,9 +246,13 @@ public class Starter {
 
     /**
      * Start server.
+     * 
+     * @throws CoreException
      */
-    private void startServer() {
-
+    private void startServer() throws CoreException {
+        jetty = new EmbeddedJetty();
+        jetty.setPort(8080);
+        jetty.start("src/main/webapp/", "/");
     }
 
     /**

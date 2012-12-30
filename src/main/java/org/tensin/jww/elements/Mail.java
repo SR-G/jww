@@ -19,6 +19,15 @@ public class Mail extends AbstractElement implements IElement {
     }
 
     /* (non-Javadoc)
+     * @see org.tensin.jww.elements.AbstractElement#check()
+     */
+    @Override
+    public void check() {
+        // TODO Auto-generated method stub
+
+    }
+
+    /* (non-Javadoc)
      * @see org.tensin.jww.elements.IElement#getName()
      */
     @Override

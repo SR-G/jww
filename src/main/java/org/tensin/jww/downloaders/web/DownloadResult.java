@@ -1,5 +1,7 @@
 package org.tensin.jww.downloaders.web;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * The Class DownloadResult.
  * 
@@ -30,10 +32,13 @@ public class DownloadResult {
     /** description. */
     private String description;
 
+    /** The content encoding. */
+    private String contentEncoding;
+
     /**
      * Constructeur.
      */
-    public DownloadResult(){
+    public DownloadResult() {
 
     }
 
@@ -51,6 +56,19 @@ public class DownloadResult {
         this.cr = cr;
         this.url = url;
         this.destFileName = destFileName;
+    }
+
+    /**
+     * Gets the content encoding.
+     * 
+     * @return the content encoding
+     */
+    public String getContentEncoding() {
+        if (StringUtils.isEmpty(contentEncoding)) {
+            return "UTF-8";
+        } else {
+            return contentEncoding;
+        }
     }
 
     /**
@@ -114,6 +132,16 @@ public class DownloadResult {
      */
     public boolean isFinished() {
         return finished;
+    }
+
+    /**
+     * Sets the download encoding.
+     * 
+     * @param contentEncoding
+     *            the new download encoding
+     */
+    public void setContentEncoding(final String contentEncoding) {
+        this.contentEncoding = contentEncoding;
     }
 
     /**

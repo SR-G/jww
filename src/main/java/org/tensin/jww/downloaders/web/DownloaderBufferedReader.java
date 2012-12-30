@@ -1,15 +1,21 @@
 package org.tensin.jww.downloaders.web;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tensin.jww.CoreException;
 
 /**
@@ -38,8 +44,17 @@ Saving to: `51f8a5c03f94cc0f510dc.gif'
  */
 public class DownloaderBufferedReader implements IDownloader {
 
+    /** The Constant Logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DownloaderBufferedReader.class);
+
     /** BUFFER_SIZE. */
     private static final int BUFFER_SIZE = 16384 * 16;
+
+    /** The Constant PATTERN_URL_REGEXP. */
+    private static final String PATTERN_URL_REGEXP = "([^/]*)//([^:]*:[^@]*)@(.*)";
+
+    /** The Constant p. */
+    private static final Pattern PATTERN_URL = Pattern.compile(PATTERN_URL_REGEXP);
 
     /**
      * {@inheritDoc}
@@ -48,34 +63,32 @@ public class DownloaderBufferedReader implements IDownloader {
      */
     @Override
     public DownloadResult download(final URL destURL, final String destinationFileName) throws CoreException {
+        LOGGER.info("Downloading [" + destURL.toString() + "] to [" + destinationFileName + "]");
         final DownloadResult result = new DownloadResult();
-        result.setUrl(destURL.toString());
         result.setDestFileName(destinationFileName);
         InputStream in = null;
-        BufferedInputStream bis = null;
-        FileOutputStream out = null;
+        FileOutputStream fis = null;
         try {
-
             final File file = new File(destinationFileName);
             final File parent = new File(file.getParent());
+            FileUtils.forceMkdir(parent);
 
-            if (!parent.exists()) {
-                parent.mkdirs();
+            HttpURLConnection connection;
+            if (isBasicAuthURL(destURL) ) {
+                final URL url = extractURL(destURL);
+                final String auth = extractAuth(destURL);
+                connection = (HttpURLConnection) url.openConnection();
+                final sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+                connection.setRequestProperty("Authorization", "Basic " + encoder.encode(auth.getBytes()));
+                result.setUrl(url.toString());
+            } else {
+                connection = (HttpURLConnection) destURL.openConnection();
+                result.setUrl(destURL.toString());
             }
-
-            in = destURL.openStream();
-            bis = new BufferedInputStream(in);
-            final byte[] buffer = new byte[BUFFER_SIZE];
-            int c = 0;
-            out = new FileOutputStream(file.getAbsolutePath());
-            int count = 0;
-            while ((c = bis.read(buffer)) != -1) {
-                out.write(buffer, 0, c);
-                out.flush();
-                count += c;
-                result.setDownloadedSize(count);
-            }
-            result.setTotalSize(count);
+            in = connection.getInputStream();
+            fis = new FileOutputStream(file.getAbsolutePath());
+            final int read = IOUtils.copy(in, fis);
+            result.setTotalSize(read);
             result.setFinished(true);
         } catch (final UnknownHostException e) {
             result.setCr(1);
@@ -84,11 +97,85 @@ public class DownloaderBufferedReader implements IDownloader {
         } catch (final IOException e) {
             result.setCr(3);
         } finally {
-            IOUtils.closeQuietly(out);
-            IOUtils.closeQuietly(bis);
+            IOUtils.closeQuietly(fis);
             IOUtils.closeQuietly(in);
         }
-
         return result;
+    }
+
+    /**
+     * Extract auth.
+     * 
+     * @param destURL
+     *            the dest url
+     * @return the string
+     */
+    public String extractAuth(final URL destURL) {
+        final Matcher m = PATTERN_URL.matcher(destURL.toString());
+        m.matches();
+
+        if (m.groupCount() == 3) {
+            final String auth = m.group(2);
+            return auth;
+        }
+        return "";
+    }
+
+    /**
+     * Extract encoding.
+     * 
+     * @param contentType
+     *            the content type
+     * @return the string
+     */
+    private String extractEncoding(final String contentType) {
+        System.out.println("!!!!!!!" + contentType);
+        final String[] values = contentType.split(";"); //The values.length must be equal to 2...
+        String charset = "";
+
+        for (String value : values) {
+            value = value.trim();
+
+            if (value.toLowerCase().startsWith("charset=")) {
+                charset = value.substring("charset=".length());
+            }
+        }
+
+        if (StringUtils.isEmpty(charset)) {
+            charset = "UTF-8";
+        }
+        return charset;
+    }
+
+    /**
+     * Extract url.
+     * 
+     * @param destURL
+     *            the dest url
+     * @return the url
+     * @throws MalformedURLException
+     *             the malformed url exception
+     */
+    public URL extractURL(final URL destURL) throws MalformedURLException {
+        final Matcher m = PATTERN_URL.matcher(destURL.toString());
+        m.matches();
+
+        if (m.groupCount() == 3) {
+            final String protocol = m.group(1);
+            final String url = protocol + "//" + m.group(3);
+            return new URL(url);
+        }
+        return destURL;
+    }
+
+    /**
+     * Checks if is basic auth url.
+     * 
+     * @param destURL
+     *            the dest url
+     * @return true, if is basic auth url
+     */
+    public boolean isBasicAuthURL(final URL destURL) {
+        return destURL.toString().matches("http://[^:]*:[^@]*@.*");
     }
 }

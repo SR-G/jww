@@ -25,12 +25,15 @@ public final class MD5Helper {
      * @return the string
      */
     public static String encodeFileName(final String url) {
-        final byte[] rawData = getMessageDigest().digest(url.getBytes());
-
         final StringBuffer printable = new StringBuffer();
-        for (final byte element : rawData) {
-            printable.append(carr[((element & 0xF0) >> 4)]);
-            printable.append(carr[(element & 0x0F)]);
+        try {
+            final MessageDigest md = (MessageDigest) getMessageDigest().clone();
+            final byte[] rawData = md.digest(url.getBytes());
+            for (final byte element : rawData) {
+                printable.append(carr[((element & 0xF0) >> 4)]);
+                printable.append(carr[(element & 0x0F)]);
+            }
+        } catch (final CloneNotSupportedException e) {
         }
 
         return printable.toString();

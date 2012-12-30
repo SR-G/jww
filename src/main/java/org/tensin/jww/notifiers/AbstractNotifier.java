@@ -12,6 +12,14 @@ public abstract class AbstractNotifier {
     @Attribute(required = true)
     private String id;
 
+    /** The cron. */
+    @Attribute(required = false)
+    private String cron;
+
+    public String getCron() {
+        return cron;
+    }
+
     /**
      * Gets the id.
      * 
@@ -19,6 +27,10 @@ public abstract class AbstractNotifier {
      */
     public String getId() {
         return id;
+    }
+
+    public void setCron(final String cron) {
+        this.cron = cron;
     }
 
     /**

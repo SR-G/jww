@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.tensin.jww.elements.AbstractElement;
 import org.tensin.jww.elements.IElement;
 import org.tensin.jww.notifiers.INotifier;
+import org.tensin.jww.notifiers.MailNotifier;
 
 /**
  * The Class ConfigurationSet.
@@ -97,9 +98,8 @@ public class ConfigurationSet {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("Configuration :\n");
         for (final IElement element : elements) {
-            sb.append(" - ").append(element.toString());
+            sb.append("   - ").append(element.toString()).append("\n");
         }
         return sb.toString();
     }
@@ -107,7 +107,7 @@ public class ConfigurationSet {
     /**
      * Update additionnal informations.
      */
-    public void updateAdditionnalInformations() {
+    public void updateAdditionnalInformations(final Configuration configuration) {
         if (StringUtils.isNotEmpty(name)) {
             if (CollectionUtils.isNotEmpty(getElements())) {
                 LOGGER.info("Updating set [" + name + "] for [" + getElements().size() + "] elements");
@@ -118,5 +118,18 @@ public class ConfigurationSet {
                 }
             }
         }
+
+        for (final IElement element : getElements()) {
+            if (element instanceof AbstractElement) {
+                ((AbstractElement) element).check();
+            }
+        }
+
+        for (final INotifier notifier : getNotifiers()) {
+            if (notifier instanceof MailNotifier) {
+                ((MailNotifier) notifier).setSmtp(configuration.getSmtp());
+            }
+        }
+
     }
 }

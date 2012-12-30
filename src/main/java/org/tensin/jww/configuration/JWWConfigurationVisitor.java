@@ -75,7 +75,7 @@ public class JWWConfigurationVisitor implements Visitor {
         for (final Class<? extends IElement> clazz : availableElements) {
             final Root annotation = clazz.getAnnotation(Root.class);
             if (annotation.name().equals(elementNode)) {
-                LOGGER.info("Registering element [" + elementNode + "] with associated class [" + clazz.getName() + "]");
+                LOGGER.debug("Registering element [" + elementNode + "] with associated class [" + clazz.getName() + "]");
                 inputNode.getAttributes().put("class", clazz.getName());
                 return true;
             }
@@ -96,7 +96,7 @@ public class JWWConfigurationVisitor implements Visitor {
         for (final Class<? extends INotifier> clazz : availableNotifiers) {
             final Root annotation = clazz.getAnnotation(Root.class);
             if (annotation.name().equals(elementNode)) {
-                LOGGER.info("Registering node [" + elementNode + "] with associated class [" + clazz.getName() + "]");
+                LOGGER.debug("Registering notifier [" + elementNode + "] with associated class [" + clazz.getName() + "]");
                 inputNode.getAttributes().put("class", clazz.getName());
                 return true;
             }

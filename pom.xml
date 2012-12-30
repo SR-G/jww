@@ -24,6 +24,9 @@
 		<version.jetty>7.6.4.v20120524</version.jetty>
 		<version.quartz>2.1.6</version.quartz>
 		<version.velocity>1.7</version.velocity>
+		<version.jsoup>1.7.1</version.jsoup>
+		<version.jersey>1.16</version.jersey>
+		<version.jetty>8.1.8.v20121106</version.jetty>
 	</properties>
 
 	<build>
@@ -143,6 +146,11 @@
 			<version>3.1</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-exec</artifactId>
 			<version>1.1</version>
@@ -256,12 +264,69 @@
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.twitter4j</groupId>
 			<artifactId>twitter4j-core</artifactId>
 			<version>[3.0,)</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${version.jsoup}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.huxhorn.lilith</groupId>
+			<artifactId>de.huxhorn.lilith.3rdparty.flyingsaucer.core-renderer</artifactId>
+			<version>8RC1</version>
+		</dependency>
+
+		<!-- Jersey (JAX-RS) -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>${version.jersey}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+			<version>${version.jersey}</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>javax.ws.rs</groupId> -->
+		<!-- <artifactId>jsr311-api</artifactId> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.sun.jersey</groupId> -->
+		<!-- <artifactId>jersey-test-framework</artifactId> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.sun.grizzly</groupId> -->
+		<!-- <artifactId>grizzly-servlet-webserver</artifactId> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${version.jetty}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>${version.jetty}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>${version.jetty}</version>
+		</dependency>
+
 	</dependencies>
 	<url>https://github.com/SR-G/${project.name}</url>
 	<organization>

@@ -1,4 +1,4 @@
-package org.tensin.jww;
+package org.tensin.jww.quartz;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,25 +11,18 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tensin.jww.AnalyzeResult;
+import org.tensin.jww.CoreException;
 import org.tensin.jww.elements.IElement;
 import org.tensin.jww.notifiers.INotifier;
 
 /**
  * The Class CronJob.
  */
-public class CronJob implements Job {
-
-    /** The Constant KEY_DATA_NOTIFIERS. */
-    public static final String KEY_DATA_NOTIFIERS = "notifiers";
-
-    /** The Constant KEY_DATA_NAME. */
-    public static final String KEY_DATA_NAME = "name";
-
-    /** The Constant KEY_DATA_CONFIGURATION. */
-    public static final String KEY_DATA_CONFIGURATION = "configuration";
+public class CronElementJob implements Job {
 
     /** The Constant Logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CronJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CronElementJob.class);
 
     /* (non-Javadoc)
      * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
@@ -67,11 +60,11 @@ public class CronJob implements Job {
     public void execute(final JobExecutionContext ctx) throws JobExecutionException {
         final JobDetail jobDetail = ctx.getJobDetail();
         final JobDataMap jobDataMap = jobDetail.getJobDataMap();
-        final IElement element = (IElement) jobDataMap.get(KEY_DATA_CONFIGURATION);
-        final String name = (String) jobDataMap.get(KEY_DATA_NAME);
-        final Collection<INotifier> globalNotifiers = (Collection<INotifier>) jobDataMap.get(KEY_DATA_NOTIFIERS);
+        final IElement element = (IElement) jobDataMap.get(CronConstants.KEY_DATA_ELEMENT_CONFIGURATION);
+        final String name = (String) jobDataMap.get(CronConstants.KEY_DATA_NAME);
+        final Collection<INotifier> globalNotifiers = (Collection<INotifier>) jobDataMap.get(CronConstants.KEY_DATA_NOTIFIERS);
         if (element != null) {
-            LOGGER.info("Set [" + name + "], analyzing [" + element.getName() + "]");
+            LOGGER.debug("Going to analyze set [" + name + "], [" + element.getName() + "]");
             try {
                 final AnalyzeResult result = element.analyze();
                 if (result.hasToBeNotified()) {

@@ -1,0 +1,15 @@
+<configuration>
+	<set name="main">
+		<elements>
+			<webpage url="http://localhost:8000/" cron="0 0/1 * * * ?" notifiers="digest"/>
+			<webpage url="http://login:password@localhost:8080/" cron="0 0/1 * * * ?" notifiers="digest"/>
+ 			<webpage url="https://play.google.com/store/devices/details?id=nexus_4_16gb" cron="0 0/1 * * * ?" notifiers="mail"/>
+		</elements>
+		<notifiers>
+			<mail id="mail" to="username@gmail.com" />
+			<digest id="digest" to="username@gmail.com" cron="0 0/5 * * * ?" />
+		</notifiers>
+	</set>
+	<smtp hostname="smtp.gmail.com" login="username@gmail.com" password="password_gmail" port="587" tls="true" />
+	<proxy />
+</configuration>

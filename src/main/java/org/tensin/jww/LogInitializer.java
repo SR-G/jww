@@ -19,10 +19,14 @@ public class LogInitializer {
     public static void initLog() {
         if (!initDone) {
             // BasicConfigurator.configureDefaultContext();
-            // org.reflections.Reflections
 
             final Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
             root.setLevel(Level.INFO);
+
+            // org.reflections.Reflections
+            final Logger reflections = (Logger) LoggerFactory.getLogger("org.reflections.Reflections");
+            reflections.setLevel(Level.WARN);
+
             initDone = true;
         }
     }

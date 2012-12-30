@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +22,9 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tensin.jww.CoreException;
@@ -155,34 +157,34 @@ public class VelociMail {
         final List<String> registeredImages = new ArrayList<String>();
         try {
             // final Resource[] resources = pmrspr.getResources("classpath:" + layout + "**/*");
-            final Reflections r = new Reflections("org.tensin");
+            final Reflections r = new Reflections(new ConfigurationBuilder()
+            .addUrls(ClasspathHelper.forPackage(layout.replaceAll("/", "."))).setScanners(new ResourcesScanner()));
 
             String baseResourceName;
             String imgResourceName;
             // String resourceName;
             // for(final Resource resource : resources) {
-            for (final String resourceName : r.getResources(Pattern.compile(".*\\.xml"))) {
-                // resourceName = resource.getFilename();
+            for (final String resourceName : r.getResources(Pattern.compile(".*"))) {
                 if (isImage(resourceName)) {
-                    baseResourceName = resourceName.substring(0, resourceName.lastIndexOf("."));
+                    baseResourceName = resourceName.replaceAll(layout, "");
+                    baseResourceName = baseResourceName.substring(0, baseResourceName.lastIndexOf("."));
                     imgResourceName = "img" + StringUtils.capitalize(baseResourceName);
                     if (listUsedImages.contains(imgResourceName)) {
                         LOGGER.debug("Merging image [" + imgResourceName + "]");
-                        velocityContext.put(imgResourceName, email.embed(new URL(resourceName), StringUtils.capitalize(baseResourceName)));
+                        velocityContext.put(imgResourceName,
+                                email.embed(getClass().getClassLoader().getResource(resourceName), StringUtils.capitalize(baseResourceName)));
                         registeredImages.add(resourceName + " (cid:" + imgResourceName + ")");
                     } else {
                         LOGGER.debug("Not merging image [" + imgResourceName + "] as it is not used in the current template");
                     }
                 }
             }
-        } catch (final IOException e) {
-            LOGGER.error("Can't load layout resource [" + layout + "] into template", e);
         } catch (final EmailException e) {
             LOGGER.error("Can't load layout resource [" + layout + "] into template", e);
         } finally {
 
         }
-        LOGGER.info("Registered images : \n" + DumpHelper.dump(registeredImages));
+        LOGGER.debug("Registered images : \n" + DumpHelper.dump(registeredImages));
     }
 
     /**
@@ -228,7 +230,7 @@ public class VelociMail {
             // embed the image and get the content id
             final Set<String> listUsedImages = loadUsedImagesFromTemplate();
             loadImagesIntoContext(email, listUsedImages); // load only images really used in the template
-            Velocity.evaluate(velocityContext, w, null, getInputStreamReader(template));
+            Velocity.evaluate(velocityContext, w, "logTag", getInputStreamReader(template));
             return w.toString();
         } catch (final ParseErrorException e) {
             LOGGER.error("Error while rendering template", e);
